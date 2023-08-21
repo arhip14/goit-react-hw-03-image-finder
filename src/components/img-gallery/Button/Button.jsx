@@ -1,4 +1,4 @@
-// Button.jsx
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import buttonStyles from './ButtonStyles';

@@ -10,7 +10,11 @@ const styles = {
     borderRadius: '4px',
     cursor: 'pointer',
     opacity: 1,
-    transition: 'opacity 0.3s',
+    transition: 'opacity 0.3s, background 0.3s',
+    ':hover': {
+      opacity: 0.8,
+      background: '#0056b3',
+    },
   },
 };
 

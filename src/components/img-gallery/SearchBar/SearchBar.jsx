@@ -1,4 +1,4 @@
-// Searchbar.jsx
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import searchbarStyles from './ SearchbarStyles';

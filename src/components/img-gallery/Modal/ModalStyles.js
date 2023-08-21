@@ -5,20 +5,25 @@ const modalStyles = {
     left: 0,
     width: '100%',
     height: '100%',
-    backgroundColor: 'rgba(0, 0, 0, 0.9)', // Темний бекдроп
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 1000,
   },
   modal: {
-    maxWidth: '100%',
-    maxHeight: '100%',
+    position: 'relative',
+    width: '90%',
+    height: '90%',
+    maxWidth: '900px',
+    maxHeight: '90%',
+    overflow: 'hidden',
   },
   image: {
     display: 'block',
-    maxWidth: '100%',
-    maxHeight: '100%',
+    width: '100%',
+    height: '100%',
+    objectFit: 'contain',
   },
 };
 

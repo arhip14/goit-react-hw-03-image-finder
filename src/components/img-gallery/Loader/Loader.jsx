@@ -1,4 +1,4 @@
-// Loader.jsx
+
 import React from 'react';
 import loaderStyles from './LoaderStyles';
 

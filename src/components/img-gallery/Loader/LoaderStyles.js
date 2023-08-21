@@ -4,6 +4,9 @@ const styles = {
     justifyContent: 'center',
     alignItems: 'center',
     height: '50px',
+    backgroundColor: '#f8f9fa',
+    borderRadius: '4px',
+    boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
   },
   spinner: {
     borderTop: '2px solid #007bff',
