@@ -6,7 +6,7 @@ import ImageGallery from './img-gallery/ImageGallery/ImagGallery';
 import Button from './img-gallery/Button/Button';
 import Loader from './img-gallery/Loader/Loader';
 import Modal from './img-gallery/Modal/Modal';
-// import styles from '../index.css';
+import '../index.css';
 
 const App = () => {
   const [images, setImages] = useState([]);
