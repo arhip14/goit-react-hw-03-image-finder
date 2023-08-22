@@ -1,5 +1,4 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState, useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Searchbar from './img-gallery/SearchBar/SearchBar';
@@ -9,20 +8,18 @@ import Loader from './img-gallery/Loader/Loader';
 import Modal from './img-gallery/Modal/Modal';
 import '../index.css';
 
-class App extends Component {
-  state = {
-    images: [],
-    selectedImage: null,
-    searchQuery: '',
-    page: 1,
-    isLoading: false,
-  };
+const App = () => {
+  const [images, setImages] = useState([]);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [page, setPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
 
-  async componentDidUpdate(prevProps, prevState) {
-    const { searchQuery, page } = this.state;
+  useEffect(() => {
+    if (searchQuery === '') return;
 
-    if (prevState.searchQuery !== searchQuery || prevState.page !== page) {
-      this.setState({ isLoading: true });
+    const fetchImages = async () => {
+      setIsLoading(true);
 
       try {
         const response = await fetch(
@@ -41,27 +38,27 @@ class App extends Component {
             progress: undefined,
           });
         } else {
-          this.setState((prevState) => ({
-            images: [...prevState.images, ...data.hits],
-          }));
+          setImages((prevImages) => [...prevImages, ...data.hits]);
         }
       } catch (error) {
         console.error('Error fetching images:', error);
       }
 
-      this.setState({ isLoading: false });
-    }
-  }
+      setIsLoading(false);
+    };
 
-  handleImageClick = (webformatURL) => {
-    this.setState({ selectedImage: webformatURL });
+    fetchImages();
+  }, [searchQuery, page]);
+
+  const handleImageClick = (webformatURL) => {
+    setSelectedImage(webformatURL);
   };
 
-  closeModal = () => {
-    this.setState({ selectedImage: null });
+  const closeModal = () => {
+    setSelectedImage(null);
   };
 
-  handleSearchSubmit = (query) => {
+  const handleSearchSubmit = (query) => {
     if (query.trim() === '') {
       toast.warn('Please enter a search keyword', {
         position: 'top-center',
@@ -75,59 +72,55 @@ class App extends Component {
       return;
     }
 
-    this.setState({ images: [], searchQuery: query, page: 1 });
+    setImages([]);
+    setSearchQuery(query);
+    setPage(1);
   };
 
-  handleLoadMoreClick = () => {
-    this.setState((prevState) => ({ page: prevState.page + 1 }));
+  const handleLoadMoreClick = () => {
+    setPage((prevPage) => prevPage + 1);
   };
 
-  handleKeyDown = (event) => {
+  const handleKeyDown = (event) => {
     if (event.key === 'Escape') {
-      this.closeModal();
+      closeModal();
     }
   };
 
-  handleBackdropClick = (event) => {
+  const handleBackdropClick = (event) => {
     if (event.target === event.currentTarget) {
-      this.closeModal();
+      closeModal();
     }
   };
 
-  handleSearchKeyDown = (event) => {
+  const handleSearchKeyDown = (event) => {
     if (event.key === 'Enter') {
       event.preventDefault();
-      this.handleSearchSubmit(event.target.value);
+      handleSearchSubmit(event.target.value);
     }
   };
 
- render() {
-    const { images, isLoading, selectedImage } = this.state;
-
-    return (
-      <div className="container">
-        <h1 className="heading">Image Finder App</h1>
-        <div className="searchbar-container">
-          <Searchbar onSubmit={this.handleSearchSubmit} onKeyDown={this.handleSearchKeyDown} />
-        </div>
-        <ImageGallery images={images} onImageClick={this.handleImageClick} />
-        {images.length > 0 && !isLoading && (
-          <Button onClick={this.handleLoadMoreClick} isVisible={!isLoading} />
-        )}
-        {isLoading && <Loader />}
-        {selectedImage && (
-          <Modal
-            src={selectedImage}
-            alt="SelectedImg"
-            onClose={this.closeModal}
-            onKeyDown={this.handleKeyDown}
-            onBackdropClick={this.handleBackdropClick}
-          />
-        )}
-        <ToastContainer position="top-right" />
-      </div>
-    );
-  }
-}
+  return (
+    <div className="container">
+      <h1 className="heading">Image Finder App</h1>
+      <Searchbar onSubmit={handleSearchSubmit} onKeyDown={handleSearchKeyDown} />
+      <ImageGallery images={images} onImageClick={handleImageClick} />
+      {images.length > 0 && !isLoading && (
+        <Button onClick={handleLoadMoreClick} isVisible={!isLoading} />
+      )}
+      {isLoading && <Loader />}
+      {selectedImage && (
+        <Modal
+          src={selectedImage}
+          alt="SelectedImg"
+          onClose={closeModal}
+          onKeyDown={handleKeyDown}
+          onBackdropClick={handleBackdropClick}
+        />
+      )}
+      <ToastContainer />
+    </div>
+  );
+};
 
 export default App;
